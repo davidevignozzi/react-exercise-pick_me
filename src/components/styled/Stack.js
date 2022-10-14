@@ -14,10 +14,10 @@ import { css } from 'styled-components';
 
 const StackWrapper = styled('div')(
   ({
-    childrendMarginTop,
-    childrendMarginBottom,
-    childrendMarginRight,
-    childrendMarginLeft,
+    childrenMarginTop,
+    childrenMarginBottom,
+    childrenMarginRight,
+    childrenMarginLeft,
     align,
     justify,
     direction,
@@ -27,13 +27,11 @@ const StackWrapper = styled('div')(
       alignItems: align,
       justifyContent: justify,
       flexDirection: direction,
-
-      // All children subsequent to all children
       '& > * + *': {
-        marginTop: childrendMarginTop,
-        marginBottom: childrendMarginBottom,
-        marginRight: childrendMarginRight,
-        marginLeft: childrendMarginLeft,
+        marginTop: childrenMarginTop,
+        marginBottom: childrenMarginBottom,
+        marginLeft: childrenMarginLeft,
+        marginRight: childrenMarginRight,
       },
     }),
   compose(flexbox, border, layout, color, space, position)
@@ -42,7 +40,7 @@ const StackWrapper = styled('div')(
 const Stack = ({
   align,
   justify,
-  direction,
+  direction = 'row',
   spacing,
   children,
   ...rest
@@ -50,15 +48,15 @@ const Stack = ({
   return (
     <StackWrapper
       {...rest}
+      childrenMarginTop={direction === 'column' ? spacing : 0}
+      childrenMarginBottom={
+        direction === 'column-reverse' ? spacing : 0
+      }
+      childrenMarginLeft={direction === 'row' ? spacing : 0}
+      childrenMarginRight={direction === 'row-reverse' ? spacing : 0}
       align={align}
       justify={justify}
       direction={direction}
-      childrendMarginTop={direction === 'column' ? spacing : 0}
-      childrendMarginBottom={
-        direction === 'column-reverse' ? spacing : 0
-      }
-      childrendMarginLeft={direction === 'row' ? spacing : 0}
-      childrendMarginRight={direction === 'row-reverse' ? spacing : 0}
     >
       {children}
     </StackWrapper>

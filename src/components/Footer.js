@@ -16,7 +16,6 @@ const Footer = () => {
               align="start"
               height="100%"
               spacing="1rem"
-              ml="1rem"
             >
               <Box>Pick me</Box>
               <Box color="grey.600">Lorem ipsum dolor sit.</Box>
