@@ -11,14 +11,21 @@ import PhotoSection from './Photo-Section';
 import Paginator from './Paginator';
 import instance from '../api';
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchData } from '../redux/reducers/api-reducer';
 
 const HomeBody = () => {
   const { photos } = useSelector((state) => state);
-  console.log(
-    '🚀 ~ file: HomeBody.js ~ line 17 ~ HomeBody ~ photos',
-    photos
-  );
+  const dispatch = useDispatch();
 
+  /**
+   * Call Api
+   *
+   */
+  useEffect(() => {
+    dispatch(fetchData('photos'));
+  }, []);
+
+  // Call api
   // useEffect(() => {
   //   async function test() {
   //     try {

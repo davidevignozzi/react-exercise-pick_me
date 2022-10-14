@@ -43,6 +43,21 @@ const {
   catchError,
   cleanError,
 } = apiSlice.actions;
+
 const { reducer } = apiSlice;
+
+export const fetchData = (path) => async (dispatch) => {
+  dispatch(startLoading());
+  dispatch(cleanError());
+
+  // Api Call
+  try {
+    const response = await instance.get(path);
+    dispatch(saveData(response.data));
+  } catch (error) {
+    dispatch(catchError(error.errors));
+  }
+  dispatch(stopLoading());
+};
 
 export default reducer;
