@@ -2,6 +2,7 @@ import React from 'react';
 import Layout from '../components/layout';
 import {
   Box,
+  Button,
   Container,
   InputWrapper,
   Skeleton,
@@ -54,6 +55,20 @@ const HomePage = () => {
           <InputWrapper placeholder="text" />
         </Box>
         <Skeleton width="300px" height="300px" />
+        <Stack spacing="24px" mt="96px">
+          <Button size="xl" variant="contained">
+            Contained
+          </Button>
+          <Button size="md" variant="outlined">
+            Outlined
+          </Button>
+          <Button size="sm" variant="text">
+            Text
+          </Button>
+          <Button size="xl" variant="disabled">
+            Disabled
+          </Button>
+        </Stack>
       </Container>
     </Layout>
   );
