@@ -6,14 +6,20 @@ const exampleSlice = createSlice({
     value: 0,
   },
   reducers: {
-    incremented: (state) => {
+    increment: (state) => {
       state.value += 1;
     },
-    decremented: (state) => {
+    decrement: (state) => {
       state.value -= 1;
+    },
+    incrementBy: (state, action) => {
+      state.value += action.payload;
     },
   },
 });
+
+export const { increment, decrement, incrementBy } =
+  exampleSlice.actions;
 
 const store = configureStore({
   reducer: {
@@ -21,5 +27,4 @@ const store = configureStore({
   },
 });
 
-export const { incremented, decremented } = exampleSlice.actions;
 export default store;

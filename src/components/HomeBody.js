@@ -10,8 +10,21 @@ import { ReactComponent as SearchIcon } from '../images/search-media.svg';
 import PhotoSection from './Photo-Section';
 import Paginator from './Paginator';
 import instance from '../api';
+import { useDispatch, useSelector } from 'react-redux';
+import { increment, decrement, incrementBy } from '../redux/store';
 
 const HomeBody = () => {
+  const { example } = useSelector((state) => state);
+  const { value } = example;
+  const dispatch = useDispatch();
+
+  const incrementByAmount = (amount) => {
+    if (amount > 0) {
+      dispatch(incrementBy(amount));
+    }
+    return;
+  };
+
   // useEffect(() => {
   //   async function test() {
   //     try {
@@ -29,7 +42,7 @@ const HomeBody = () => {
       <Container mt="96px">
         <Stack justify="space-between" align="end">
           <h4>Search your photos</h4>
-          <p style={{ color: 'var(--grey-700' }}>Richieste 50/50</p>
+          <p style={{ color: 'var(--grey-700' }}>{value}</p>
         </Stack>
         <Box mt="24px">
           <Stack
@@ -52,6 +65,7 @@ const HomeBody = () => {
             />
 
             <Button
+              onClick={() => incrementByAmount(10)}
               rightIcon={<SearchIcon />}
               isLoading={false}
               disabled={false}
