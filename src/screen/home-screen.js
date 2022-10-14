@@ -1,6 +1,12 @@
 import React from 'react';
 import Layout from '../components/layout';
-import { Box, Container, Stack } from '../components/styled';
+import {
+  Box,
+  Container,
+  InputWrapper,
+  Skeleton,
+  Stack,
+} from '../components/styled';
 
 const HomePage = () => {
   return (
@@ -44,6 +50,10 @@ const HomePage = () => {
             borderRadius="16px"
           ></Box>
         </Stack>
+        <Box my="96px">
+          <InputWrapper placeholder="text" />
+        </Box>
+        <Skeleton width="300px" height="300px" />
       </Container>
     </Layout>
   );
