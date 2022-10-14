@@ -12,17 +12,17 @@ import Paginator from './Paginator';
 import instance from '../api';
 
 const HomeBody = () => {
-  useEffect(() => {
-    async function test() {
-      try {
-        const response = await instance.get('photos');
-        console.log('RESPONSE', response);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-    // test();
-  }, []);
+  // useEffect(() => {
+  //   async function test() {
+  //     try {
+  //       const response = await instance.get('photos');
+  //       console.log('RESPONSE', response);
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   }
+  //   test();
+  // }, []);
 
   return (
     <Container size="fullwidth">
