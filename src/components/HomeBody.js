@@ -11,16 +11,25 @@ import PhotoSection from './Photo-Section';
 import Paginator from './Paginator';
 import instance from '../api';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchData } from '../redux/reducers/api-reducer';
+import {
+  catchError,
+  fetchData,
+  saveQuery,
+} from '../redux/reducers/api-reducer';
 import { rowalizer } from '../utils/helpers';
 
 const HomeBody = () => {
-  const { photos, error, loading, rate_limit } = useSelector(
-    (state) => state.photos
-  );
+  const {
+    photos,
+    error,
+    loading,
+    rate_limit,
+    query: lastSearch,
+  } = useSelector((state) => state.photos);
   const dispatch = useDispatch();
 
   const [itemPerPage, setItemPerPage] = useState(12);
+  const [query, setQuery] = useState('');
 
   /**
    * Call Api
@@ -28,24 +37,42 @@ const HomeBody = () => {
    */
 
   // ----------------------------------------------------------------
-  const fetchPhotos = useCallback(
-    (type = 'latest', page = 1) => {
-      let apiUrl = null;
-      if (type === 'search') {
-        return;
-      } else {
-        apiUrl = 'photos?';
-      }
-      dispatch(
-        fetchData(`${apiUrl}per_page=${itemPerPage}&page=${page}`)
-      );
-    },
-    [itemPerPage, dispatch]
-  );
+  const searchPhoto = (page = 1) => {
+    fetchPhotos('search');
+  };
 
+  const fetchPhotos = (type = 'latest', page = 1) => {
+    let apiUrl = null;
+    if (type === 'search') {
+      if (query && query.length > 1 && query !== ' ') {
+        apiUrl = `search/photos?query=${query}&`;
+      } else {
+        dispatch(catchError(['Inserisci almeno un carattere']));
+        return;
+      }
+    } else {
+      apiUrl = 'photos?';
+    }
+    dispatch(
+      fetchData(`${apiUrl}per_page=${itemPerPage}&page=${page}`)
+    );
+
+    dispatch(
+      saveQuery({
+        path: `${apiUrl}`.trim(),
+        itemPerPage,
+        type,
+        query,
+      })
+    );
+  };
   useEffect(() => {
-    fetchPhotos();
-  }, [fetchPhotos]);
+    if (!lastSearch.query) {
+      fetchPhotos();
+    } else {
+      fetchPhotos(lastSearch.type);
+    }
+  }, [itemPerPage]);
   // ----------------------------------------------------------------
 
   // Call api
@@ -76,7 +103,7 @@ const HomeBody = () => {
             bg="grey.900"
             borderRadius="100px"
             border="1px solid"
-            borderColor={'grey.700'}
+            borderColor={error.status ? 'error' : 'grey.700'}
             px="18px"
             style={{ overflowX: 'hidden' }}
           >
@@ -84,9 +111,9 @@ const HomeBody = () => {
               placeholder="Cerca una Foto"
               border="none"
               pl="0px"
-              value="React"
-              onChange={() => {
-                return;
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
               }}
             />
 
@@ -97,25 +124,29 @@ const HomeBody = () => {
               variant="text"
               iconColor="grey.700"
               bg="grey.900"
+              onClick={() => searchPhoto()}
             />
           </Stack>
         </Box>
 
         <Container mt="72px">
           <Stack direction="column" spacing="118px">
-            {/* Handle Loading and Error */}
-            {!loading && !error.status && photos.length > 0 ? (
-              rowalizer(photos).map((el) => {
-                return <PhotoSection row={el} />;
-              })
+            {!loading &&
+            !error.status &&
+            (photos?.length > 0 || photos?.results?.length > 0) ? (
+              rowalizer(
+                photos?.results ? photos.results : photos
+              ).map((row, index) => (
+                <PhotoSection row={row} key={index} />
+              ))
             ) : !loading && error.status ? (
-              error.message && error.length > 0 ? (
-                error.message.join(' ')
-              ) : (
-                'Errore'
-              )
+              <h3>
+                {error?.message && error.message.length > 0
+                  ? error.message.join(' ')
+                  : 'Sorry, there was an Error. Try Again'}
+              </h3>
             ) : (
-              <h3>Loading</h3>
+              <h3>Loading...</h3>
             )}
 
             <Stack justify="flex-end">

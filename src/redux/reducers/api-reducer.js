@@ -2,6 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 import instance from '../../api';
 
 const initialState = {
+  query: {
+    path: '',
+    itemPerPage: null,
+    type: '',
+    query: '',
+  },
   loading: true,
   error: {
     status: false,
@@ -28,6 +34,9 @@ const apiSlice = createSlice({
     saveData: (state, action) => {
       state.photos = action.payload;
     },
+    saveQuery: (state, action) => {
+      state.query = { ...action.payload };
+    },
     catchError: (state, action) => {
       state.error.status = true;
       state.error.message = action.payload;
@@ -48,6 +57,7 @@ const apiSlice = createSlice({
 const {
   startLoading,
   saveData,
+  saveQuery,
   stopLoading,
   catchError,
   cleanError,
@@ -80,5 +90,7 @@ export const fetchData = (path) => async (dispatch) => {
   }
   dispatch(stopLoading());
 };
+
+export { cleanError, catchError, saveQuery };
 
 export default reducer;
