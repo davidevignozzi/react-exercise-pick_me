@@ -11,7 +11,7 @@ const Header = () => {
         size="fullwidth"
         position="fixed"
         background="grey.800"
-        z-index={999}
+        zIndex={999}
       >
         <Stack direction="column" align="center">
           <Container>
