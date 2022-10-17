@@ -14,8 +14,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchData } from '../redux/reducers/api-reducer';
 
 const HomeBody = () => {
-  const { photos } = useSelector((state) => state);
+  const { photos, error, loading, rate_limit } = useSelector(
+    (state) => state.photos
+  );
   const dispatch = useDispatch();
+
+  const [itemPerPage, setItemPerPage] = useState(12);
 
   /**
    * Call Api
@@ -43,7 +47,9 @@ const HomeBody = () => {
       <Container mt="96px">
         <Stack justify="space-between" align="end">
           <h4>Search your photos</h4>
-          <p style={{ color: 'var(--grey-700' }}>50/50</p>
+          <p
+            style={{ color: 'var(--grey-700' }}
+          >{`Richieste: ${rate_limit.remaining} / ${rate_limit.total}`}</p>
         </Stack>
         <Box mt="24px">
           <Stack
@@ -75,6 +81,42 @@ const HomeBody = () => {
             />
           </Stack>
         </Box>
+
+        <Container mt="72px">
+          <Stack direction="column" spacing="118px">
+            {!loading && !error.status && photos.length > 0 ? (
+              <p>photo</p>
+            ) : !loading && error.status ? (
+              error.message && error.length > 0 ? (
+                error.message.join(' ')
+              ) : (
+                'Errore'
+              )
+            ) : (
+              <h3>Loading</h3>
+            )}
+
+            <Stack justify="flex-end">
+              <p style={{ color: 'var(--grey-700)' }}>
+                Item per Page
+                <select
+                  value={itemPerPage}
+                  onChange={(e) => setItemPerPage(e.target.value)}
+                >
+                  {Array.from({ length: 7 }, (_, index) => {
+                    return (index + 1) * 3;
+                  }).map((el) => {
+                    return (
+                      <option value={el} key={`option-${el}`}>
+                        {el}
+                      </option>
+                    );
+                  })}
+                </select>
+              </p>
+            </Stack>
+          </Stack>
+        </Container>
       </Container>
     </Container>
   );
