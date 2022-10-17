@@ -26,9 +26,24 @@ const HomeBody = () => {
    * Call Api
    *
    */
+
+  // ----------------------------------------------------------------
+  const fetchPhotos = (type = 'latest', page = 1) => {
+    let apiUrl = null;
+    if (type === 'search') {
+      return;
+    } else {
+      apiUrl = 'photos?';
+    }
+    dispatch(
+      fetchData(`${apiUrl}per_page=${itemPerPage}&page=${page}`)
+    );
+  };
+
   useEffect(() => {
-    dispatch(fetchData('photos'));
-  }, []);
+    fetchPhotos();
+  }, [itemPerPage]);
+  // ----------------------------------------------------------------
 
   // Call api
   // useEffect(() => {
