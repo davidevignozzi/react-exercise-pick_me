@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Button,
@@ -28,21 +28,24 @@ const HomeBody = () => {
    */
 
   // ----------------------------------------------------------------
-  const fetchPhotos = (type = 'latest', page = 1) => {
-    let apiUrl = null;
-    if (type === 'search') {
-      return;
-    } else {
-      apiUrl = 'photos?';
-    }
-    dispatch(
-      fetchData(`${apiUrl}per_page=${itemPerPage}&page=${page}`)
-    );
-  };
+  const fetchPhotos = useCallback(
+    (type = 'latest', page = 1) => {
+      let apiUrl = null;
+      if (type === 'search') {
+        return;
+      } else {
+        apiUrl = 'photos?';
+      }
+      dispatch(
+        fetchData(`${apiUrl}per_page=${itemPerPage}&page=${page}`)
+      );
+    },
+    [itemPerPage, dispatch]
+  );
 
   useEffect(() => {
     fetchPhotos();
-  }, [itemPerPage]);
+  }, [fetchPhotos]);
   // ----------------------------------------------------------------
 
   // Call api
