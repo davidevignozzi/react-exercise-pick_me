@@ -12,6 +12,7 @@ import Paginator from './Paginator';
 import instance from '../api';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchData } from '../redux/reducers/api-reducer';
+import { rowalizer } from '../utils/helpers';
 
 const HomeBody = () => {
   const { photos, error, loading, rate_limit } = useSelector(
@@ -84,8 +85,11 @@ const HomeBody = () => {
 
         <Container mt="72px">
           <Stack direction="column" spacing="118px">
+            {/* Handle Loading and Error */}
             {!loading && !error.status && photos.length > 0 ? (
-              <p>photo</p>
+              rowalizer(photos).map((el) => {
+                return <PhotoSection row={el} />;
+              })
             ) : !loading && error.status ? (
               error.message && error.length > 0 ? (
                 error.message.join(' ')
