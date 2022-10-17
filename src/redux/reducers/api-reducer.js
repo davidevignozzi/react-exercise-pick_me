@@ -8,6 +8,10 @@ const initialState = {
     message: '',
   },
   photos: [],
+  rate_limit: {
+    remaining: null,
+    total: 50,
+  },
 };
 
 const apiSlice = createSlice({
@@ -33,6 +37,11 @@ const apiSlice = createSlice({
       state.error.status = false;
       state.error.message = '';
     },
+    checkRateLimiter: (state, action) => {
+      state.rate_limit = {
+        ...action.payload,
+      };
+    },
   },
 });
 
@@ -42,6 +51,7 @@ const {
   stopLoading,
   catchError,
   cleanError,
+  checkRateLimiter,
 } = apiSlice.actions;
 
 const { reducer } = apiSlice;
@@ -53,7 +63,18 @@ export const fetchData = (path) => async (dispatch) => {
   // Api Call
   try {
     const response = await instance.get(path);
+    console.log(response);
+
+    // Save Data
     dispatch(saveData(response.data));
+
+    // Check request limit
+    dispatch(
+      checkRateLimiter({
+        total: response.headers['x-ratelimit-limit'],
+        remaining: response.headers['x-ratelimit-remaining'],
+      })
+    );
   } catch (error) {
     dispatch(catchError(error.errors));
   }
