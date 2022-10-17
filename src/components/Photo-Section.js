@@ -6,8 +6,7 @@ const PhotoSection = ({ row, index }) => {
   return (
     <Stack justify="flex-start" spacing="20px">
       {row.map((photo) => {
-        // return <Photo key={photo.id} {...photo} />;
-        return <div>Photo</div>;
+        return <Photo key={photo.id} {...photo} />;
       })}
     </Stack>
   );
