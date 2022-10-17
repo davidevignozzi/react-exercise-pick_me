@@ -178,6 +178,7 @@ const HomeBody = () => {
           </Stack>
         </Container>
       </Container>
+      <Paginator />
     </Container>
   );
 };
