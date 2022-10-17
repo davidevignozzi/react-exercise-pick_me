@@ -15,6 +15,7 @@ import {
   catchError,
   fetchData,
   saveQuery,
+  updatePage,
 } from '../redux/reducers/api-reducer';
 import { rowalizer } from '../utils/helpers';
 
@@ -38,7 +39,7 @@ const HomeBody = () => {
 
   // ----------------------------------------------------------------
   const searchPhoto = (page = 1) => {
-    fetchPhotos('search');
+    fetchPhotos('search', page);
   };
 
   const fetchPhotos = (type = 'latest', page = 1) => {
@@ -53,6 +54,11 @@ const HomeBody = () => {
     } else {
       apiUrl = 'photos?';
     }
+
+    // Pagination
+    dispatch(updatePage(page));
+
+    // Get Data
     dispatch(
       fetchData(`${apiUrl}per_page=${itemPerPage}&page=${page}`)
     );
@@ -66,6 +72,7 @@ const HomeBody = () => {
       })
     );
   };
+
   useEffect(() => {
     if (!lastSearch.query) {
       fetchPhotos();
