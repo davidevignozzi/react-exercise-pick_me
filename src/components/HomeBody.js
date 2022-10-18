@@ -29,8 +29,10 @@ const HomeBody = () => {
   } = useSelector((state) => state.photos);
   const dispatch = useDispatch();
 
-  const [itemPerPage, setItemPerPage] = useState(12);
-  const [query, setQuery] = useState('');
+  const [itemPerPage, setItemPerPage] = useState(
+    lastSearch.itemPerPage || 12
+  );
+  const [query, setQuery] = useState(lastSearch.query || '');
 
   /**
    * Call Api
