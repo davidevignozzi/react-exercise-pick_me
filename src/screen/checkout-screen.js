@@ -1,5 +1,5 @@
-import React from "react";
-import Layout from "../components/layout";
+import React from 'react';
+import Layout from '../components/layout';
 // import {
 //   Container,
 //   Box,
@@ -7,10 +7,10 @@ import Layout from "../components/layout";
 //   Button,
 //   InputWrapper,
 // } from "../components/styled";
-import { useDispatch, useSelector } from "react-redux";
-import { RiDeleteBack2Fill } from "react-icons/ri";
-import { Formik } from "formik";
-import * as Yup from "yup";
+import { useDispatch, useSelector } from 'react-redux';
+import { RiDeleteBack2Fill } from 'react-icons/ri';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 // IL FORM FINALE E' IN FONDO AL FILE COMMENTATO !
 
