@@ -18,7 +18,7 @@ import {
 
 const CheckoutScreen = () => {
   const dispatch = useDispatch();
-  const { cart } = useSelector((store) => store.cart);
+  const { cart, total } = useSelector((store) => store.cart);
 
   return (
     <Layout>
@@ -144,7 +144,8 @@ const CheckoutScreen = () => {
                     />
                     <InputWrapper width="100px" placeholder="CAP" />
                   </Stack>
-                  <Stack justify="flex-end">
+                  <Stack justify="space-between" align="center">
+                    <h4>{total} €</h4>
                     <Button
                       type="submit"
                       variant="contained"
