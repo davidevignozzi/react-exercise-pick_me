@@ -1,12 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit';
 import instance from '../../api';
+import {
+  getItemFromLocalStorage,
+  setLocalStorageItem,
+} from '../../utils/helpers';
+
+const isQuerySaved = (action) => {
+  return action.type.endsWith('/saveQuery');
+};
+
+const path = getItemFromLocalStorage('query')?.path || '';
+const itemPerPage =
+  getItemFromLocalStorage('query')?.itemPerPage || null;
+const type = getItemFromLocalStorage('query')?.type || '';
+const query = getItemFromLocalStorage('query')?.query || '';
 
 const initialState = {
   query: {
-    path: '',
-    itemPerPage: null,
-    type: '',
-    query: '',
+    path: path,
+    itemPerPage: itemPerPage,
+    type: type,
+    query: query,
   },
   loading: true,
   error: {
@@ -65,6 +79,11 @@ const apiSlice = createSlice({
       state.pagination.hasPrevPage = action.payload.hasPrevPage;
       state.pagination.totalPages = action.payload.totalPages;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(isQuerySaved, (state) => {
+      setLocalStorageItem('query', state.query);
+    });
   },
 });
 

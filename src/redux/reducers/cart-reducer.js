@@ -1,4 +1,8 @@
-import { createSlice, createAction } from '@reduxjs/toolkit';
+import { createSlice, createAction, isAnyOf } from '@reduxjs/toolkit';
+import {
+  getItemFromLocalStorage,
+  setLocalStorageItem,
+} from '../../utils/helpers';
 
 const removeFromCart = createAction('remove-from-cart');
 
@@ -10,9 +14,24 @@ const isRemoveFromCartAction = (action) => {
   return action.type.endsWith('remove-from-cart');
 };
 
+const isCartCleaned = (action) => {
+  return action.type.endsWith('/cleanCart');
+};
+
+const isCartAction = (action) => {
+  return isAnyOf(
+    isAddToCartAction,
+    isRemoveFromCartAction,
+    isCartCleaned
+  )(action);
+};
+
+const localStorageCart = getItemFromLocalStorage('cart');
+const totalFromLocalStorage = getItemFromLocalStorage('total');
+
 const initialState = {
-  cart: [],
-  total: 0,
+  cart: localStorageCart ? localStorageCart : [],
+  total: totalFromLocalStorage || 0,
   payed: false,
 };
 
@@ -43,6 +62,10 @@ const cartSlice = createSlice({
       })
       .addMatcher(isRemoveFromCartAction, (state, action) => {
         state.total -= action.payload.likes;
+      })
+      .addMatcher(isCartAction, (state) => {
+        setLocalStorageItem('cart', state.cart);
+        setLocalStorageItem('total', state.total);
       })
       .addDefaultCase((state) => {
         return state;

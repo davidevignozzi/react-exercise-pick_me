@@ -7,3 +7,15 @@ export const rowalizer = (array, item_per_row = 3) => {
     return array.slice(start, end);
   });
 };
+
+export const getItemFromLocalStorage = (key) => {
+  if (localStorage.getItem(key)) {
+    return JSON.parse(localStorage.getItem(key));
+  }
+};
+
+export const setLocalStorageItem = (key, item) => {
+  if (item && typeof key === 'string') {
+    localStorage.setItem(key, JSON.stringify(item));
+  }
+};
